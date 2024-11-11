@@ -16,11 +16,13 @@ CORS(app)
 
 
 # temporary local login DB
+'''
 logins = {
     "kylecj21": 'password',
     "AleHuerta" : 'IRunSlow',
     "Smallberg" : 'I<3C++'
 }
+'''
 
 print("here", os.getenv('DB_HOST'))
 # Database connection parameters
@@ -76,7 +78,7 @@ def register():
 
         cursor.execute("SELECT * FROM users WHERE Username = %s;", (username,))
         users = cursor.fetchall()
-        print(users)
+        #print(users)
         if(len(users)>0):
             return jsonify({"message": "Username taken!", "users":[],"status":401}),401
 
@@ -91,6 +93,7 @@ def register():
             return jsonify({"message": "Database connection successful", "users": users, "status":200}), 200
     
     except Exception as e:
+        #for now just print e
         print(e)
     finally:
         if cursor is not None:
@@ -103,6 +106,44 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')   
+    #added conneciton and cursor to SQL
+    conn = None
+    cursor = None
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM users WHERE Username = %s;", (username,))
+        users = cursor.fetchall()
+        print(users, "HEREEREREREeasfd")
+
+        if (len(users)==0):
+            # Username not found in the database
+            return jsonify({"message": "User not found", "status": 401}), 401
+        elif  (users[0][2]==password):
+            #I think users is the whole users object with the number, username, password, 
+            #and friendslist right? Probably ok to just return the object itself for future reference
+            return jsonify({"message": "Login successful", "status": 200, "users":users}), 200
+        else:
+            # Username found but password is incorrect
+            return jsonify({"message": "Login failed", "status": 401}), 401
+        
+    except Exception as e:
+        #for now just print e
+        print(e)
+
+    #deactivate cursors
+    finally:
+        if cursor is not None:
+            cursor.close()
+        if conn is not None:
+            conn.close()
+
+
+
+
+
+
     print(logins)
     if username not in logins:
         return jsonify({"message": "User not found", "status": 401}), 401
