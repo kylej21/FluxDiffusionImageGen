@@ -39,7 +39,7 @@ def test_db():
     cursor = None
     try:
         conn = get_db_connection()
-        cursor = conn.cursor()
+        cursor = conn.cursor()   #point in the query
 
         # Query for users with the username 'kylecj21'
         cursor.execute("SELECT * FROM users WHERE Username = %s;", ('kylecj21',))
