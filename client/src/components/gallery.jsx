@@ -1,12 +1,7 @@
-// client/src/components/Gallery.jsx
-
 import React, { useEffect, useState } from 'react';
 import './Gallery.css';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import debounce from 'lodash.debounce';
-import NavButton from './navbutton.jsx';
-import './home.css'; // Import your CSS file
 
 function Gallery() {
   const [images, setImages] = useState([]);
@@ -16,21 +11,16 @@ function Gallery() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { enqueueSnackbar } = useSnackbar();
-  const [navBarOpen, setNavBarOpen] = useState(false);
   const navigate = useNavigate();
 
-  const limit = 10; // Images per page
+  const limit = 14; // Images per page
 
   const fetchImages = async (title = '', uploader = '', pageNumber = 1) => {
     setIsLoading(true);
     try {
       let apiUrl = `http://127.0.0.1:8000/gallery?page=${pageNumber}&limit=${limit}`;
-      if (title) {
-        apiUrl += `&title=${encodeURIComponent(title)}`;
-      }
-      if (uploader) {
-        apiUrl += `&uploader=${encodeURIComponent(uploader)}`;
-      }
+      if (title) apiUrl += `&title=${encodeURIComponent(title)}`;
+      if (uploader) apiUrl += `&uploader=${encodeURIComponent(uploader)}`;
 
       const response = await fetch(apiUrl);
       if (!response.ok) {
@@ -40,6 +30,8 @@ function Gallery() {
       }
 
       const result = await response.json();
+      console.log(`Fetched data for page ${pageNumber}:`, result);
+
       setImages(result.images);
       setPage(result.page);
       setTotalPages(result.total_pages);
@@ -57,22 +49,21 @@ function Gallery() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1);
     fetchImages(searchTitle, searchUploader, 1);
   };
 
   const handleNextPage = () => {
-    if (page < totalPages) {
+    if (page < totalPages && !isLoading) {
       const nextPage = page + 1;
-      setPage(nextPage);
+      console.log('Next button clicked. Fetching page:', nextPage);
       fetchImages(searchTitle, searchUploader, nextPage);
     }
   };
 
   const handlePreviousPage = () => {
-    if (page > 1) {
+    if (page > 1 && !isLoading) {
       const prevPage = page - 1;
-      setPage(prevPage);
+      console.log('Previous button clicked. Fetching page:', prevPage);
       fetchImages(searchTitle, searchUploader, prevPage);
     }
   };
@@ -82,35 +73,34 @@ function Gallery() {
   };
 
   return (
-    <div className="gallery-container" data-nav={navBarOpen.toString()}>
-      <h2>Community Gallery</h2>
-
-      {/* Search Form */}
+    <div className="gallery-container">
+     <h2 className="gallery-header">Community Gallery</h2>
       <form onSubmit={handleSearch} className="search-form">
-        <div className="search-group">
-          <input
-            type="text"
-            placeholder="Search by title..."
-            value={searchTitle}
-            onChange={(e) => setSearchTitle(e.target.value)}
-            className="search-input"
-          />
-        </div>
-        <div className="search-group">
-          <input
-            type="text"
-            placeholder="Search by uploader..."
-            value={searchUploader}
-            onChange={(e) => setSearchUploader(e.target.value)}
-            className="search-input"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder="Search by title..."
+          value={searchTitle}
+          onChange={(e) => setSearchTitle(e.target.value)}
+          className="search-input"
+        />
+        <input
+          type="text"
+          placeholder="Search by uploader..."
+          value={searchUploader}
+          onChange={(e) => setSearchUploader(e.target.value)}
+          className="search-input"
+        />
         <button type="submit" className="search-button" disabled={isLoading}>
-          {isLoading ? 'Searching...' : 'Search'}
+          {isLoading ? (
+            <>
+              <div className="spinner" aria-hidden="true"></div>
+            </>
+          ) : (
+            'Search'
+          )}
         </button>
       </form>
 
-      {/* Gallery Grid */}
       <div className="gallery-grid">
         {images.length > 0 ? (
           images.map((image) => (
@@ -119,7 +109,6 @@ function Gallery() {
                 src={`data:image/png;base64,${image.image}`}
                 alt={image.title}
                 className="gallery-image"
-                loading="lazy"
               />
               <div className="gallery-info">
                 <h3>{image.title}</h3>
@@ -130,30 +119,35 @@ function Gallery() {
             </div>
           ))
         ) : (
-          <p>No images found.</p>
+          !isLoading && <p>No images found.</p>
         )}
       </div>
 
-      {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="pagination-controls">
-          <button onClick={handlePreviousPage} disabled={page === 1 || isLoading}>
+          <button
+            className="pagination-button"
+            onClick={handlePreviousPage}
+            disabled={page === 1 || isLoading}
+          >
             Previous
           </button>
-          <span>
+          <span className="pagination-info">
             Page {page} of {totalPages}
           </span>
-          <button onClick={handleNextPage} disabled={page === totalPages || isLoading}>
+          <button
+            className="pagination-button"
+            onClick={handleNextPage}
+            disabled={page === totalPages || isLoading}
+          >
             Next
           </button>
         </div>
       )}
 
-      {/* "Go Back" Button at the Bottom */}
-      <button onClick={handleGoBack} className="go-back-button">
+      <button className="go-back-button" onClick={handleGoBack}>
         Go Back
       </button>
-      <NavButton classname="nav-section" setNavBarOpen={setNavBarOpen} navBarOpen={navBarOpen}/>
     </div>
   );
 }
