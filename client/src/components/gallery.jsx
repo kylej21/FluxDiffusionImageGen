@@ -13,7 +13,7 @@ function Gallery() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
-  const limit = 14; // Images per page
+  const limit = 5; // Images per page
 
   const fetchImages = async (title = '', uploader = '', pageNumber = 1) => {
     setIsLoading(true);

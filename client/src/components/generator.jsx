@@ -180,7 +180,7 @@ const Generator = () => {
           <div className="loading-container">
             <div className="loading-overlay"></div>
             <div className="loading-indicator"></div>
-            <h1 className="loading-text">Your Image is being generated, please wait</h1>
+            <h1 className="loading-text">Your Image is being generated, please wait, ETA 2-3 minutes</h1>
           </div>
         )}
 
