@@ -15,7 +15,48 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const { enqueueSnackbar } = useSnackbar();
+    
+    const hashPassword = (password) => {
+        let hash = 0x4e2df57a; // Initial seed (arbitrary prime number)
+        const rotateLeft = (n, x) => ((x << n) | (x >>> (32 - n)));
+        const blocks = [];
 
+        // Convert password to blocks of numbers
+        for (let i = 0; i < password.length; i += 4) {
+            let block = 0;
+            for (let j = 0; j < 4 && i + j < password.length; j++) {
+                block += password.charCodeAt(i + j) << (j * 8);
+            }
+            blocks.push(block);
+        }
+
+        // Add password length as final block (helps with avalanche effect)
+        blocks.push(password.length);
+
+        // Main hashing loop with multiple rounds
+        for (let i = 0; i < blocks.length; i++) {
+            hash ^= blocks[i];
+            hash = rotateLeft(13, hash);
+            hash = hash * 5 + 0x6b64a89b; // Multiple with prime and add salt
+            
+            // Additional mixing
+            hash ^= hash >>> 16;
+            hash = (hash + (hash << 3)) & 0xffffffff;
+            hash ^= hash >>> 11;
+            hash = Math.imul(hash, 0x85ebca6b);
+            hash ^= hash >>> 15;
+        }
+
+        // Final mixing round
+        hash ^= hash >>> 16;
+        hash = Math.imul(hash, 0xc2b2ae35);
+        hash ^= hash >>> 13;
+        hash = Math.imul(hash, 0x85ebca6b);
+        hash ^= hash >>> 16;
+
+        // Convert to hex string and ensure it's always positive
+        return (hash >>> 0).toString(16).padStart(8, '0');
+    };
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -37,6 +78,7 @@ const Login = () => {
         };
     }, [showCanvas, isLogin, username, password, confirmPassword]);
 
+
     // Second useEffect - for fetching images when user changes
     /*useEffect(() => {
         if (user?.username) {
@@ -44,13 +86,15 @@ const Login = () => {
             fetchUserImages();
         }
     }, [user]);*/
+    
     const handleLogin = () => {
+        const hashedPass = hashPassword(password);
         fetch('http://127.0.0.1:8000/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password: hashedPass }),
         })
         .then((res) => res.json())
         .then((res) => {
@@ -117,6 +161,7 @@ const Login = () => {
 
 
     const handleSignup = () => {
+        const hashedPass = hashPassword(password);
         if (password !== confirmPassword) {
             enqueueSnackbar('Passwords do not match', { variant: 'error', autoHideDuration: 3000 });
             return;
@@ -130,7 +175,7 @@ const Login = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password: hashedPass }),
         })
         .then((res) => res.json())
         .then((res) => {
