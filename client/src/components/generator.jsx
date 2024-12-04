@@ -20,8 +20,6 @@ const Generator = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  // Debug!!
-  console.log("Current User:", user);
 
   /**
    * Handles the form submission to generate an image based on the prompt.
@@ -53,7 +51,7 @@ const Generator = () => {
       const image_recv = await response.json();
       const imageData = `data:image/png;base64,${image_recv.image}`;
       setGeneratedImage(imageData);
-      console.log("Set generated image to:", imageData);
+ 
       enqueueSnackbar('Image generated successfully!', { variant: 'success', autoHideDuration: 3000 });
     } catch (error) {
       console.error("Error generating image:", error);
@@ -70,7 +68,6 @@ const Generator = () => {
    */
   const uploadImage = async () => {
     if (!generatedImage) {
-      console.log("No image to upload.");
       setUploadStatus('No image to upload.');
       enqueueSnackbar('No image to upload.', { variant: 'warning', autoHideDuration: 3000 });
       return;
@@ -116,7 +113,6 @@ const Generator = () => {
       }
 
       const result = await response.json();
-      console.log("Image uploaded successfully:", result);
       setUploadStatus('Upload successful!');
       enqueueSnackbar('Image uploaded successfully!', { variant: 'success', autoHideDuration: 3000 });
 

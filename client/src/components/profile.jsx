@@ -20,7 +20,7 @@ const Profile = () => {
     const fetchUserImages = async (targetUsername) => {
         const imagesPerPage = 10; // Adjust as needed
         try {
-            console.log("this is: ", targetUsername);
+            //console.log("this is: ", targetUsername);
             const response = await fetch(`http://127.0.0.1:8000/gallery?uploader=${targetUsername}&limit=${imagesPerPage}&page=1`, {
                 method: 'GET',
                 headers: {
@@ -31,7 +31,7 @@ const Profile = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log('Fetched Images Data:', data.images);
+                //console.log('Fetched Images Data:', data.images);
                 setUserImages(data.images); // Store the fetched images in state
             } else {
                 console.error('Failed to fetch images:', data.message);
@@ -43,7 +43,7 @@ const Profile = () => {
 
     // function to fetch friends
     const fetchFriends = async (targetUsername) => {
-        console.log("getting friends of ", targetUsername);
+        //console.log("getting friends of ", targetUsername);
         try {
             // First get the user's data to get their friends array
             const response = await fetch(`http://127.0.0.1:8000/get_friends`, {
@@ -59,7 +59,7 @@ const Profile = () => {
             const data = await response.json();
             if (response.ok) {
                 setFriends(data.friends);
-                console.log('Fetched Friends:', data.friends);
+                //console.log('Fetched Friends:', data.friends);
             } else {
                 console.error('Failed to fetch friends:', data.message);
             }
@@ -73,10 +73,11 @@ const Profile = () => {
             setIsOwnProfile(tabname === loginname);
             if(!username){
                 setIsOwnProfile(true);
-            }
+            }/*
             console.log("check own: ", isOwnProfile);
             console.log("username is: ", tabname);
             console.log("user.name is: ", loginname);
+            */
         }
         else{
             setIsOwnProfile(false);
@@ -87,24 +88,24 @@ const Profile = () => {
     useEffect(() => {
         isOwn(username, user.name);
         if (username) {
-            console.log("username: " + username);
+            //console.log("username: " + username);
             setExternalUser({ id: 1, name: username, friends: [1, 3, 7] });
             fetchUserImages(username); // Fetch images for external user
-            console.log("useImages: ", userImages);
+            //console.log("useImages: ", userImages);
         } else if (user?.name) {
-            console.log("name of user: " + user.name);
+            //console.log("name of user: " + user.name);
             fetchUserImages(user.name); // Fetch images for logged-in user
             fetchFriends(user.name); // Add this line
-            console.log(userImages);
-            console.log(friends);
+            //console.log(userImages);
+            //console.log(friends);
         }
         else{
-            console.log("not ready yet");
+            //console.log("not ready yet");
         }
     }, [username, user?.name]); 
 
     if (username && externalUser) {
-        console.log("passing")
+        //console.log("passing")
         return (
             <div className="profile-div" data-nav={navBarOpen.toString()}>
                 <ProfileContent user={externalUser} isOwnProfile={isOwnProfile} images = {userImages} friends = {friends}/>
