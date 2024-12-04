@@ -6,8 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setUser, clearUser } from '../store/reducers/userReducer';
 
 const ProfileContent = ({ user, images, friends, isOwnProfile }) => {
-    // console.log("hey")
-    // console.log(images)
     const [activeTab, setActiveTab] = useState('recentImages'); // 'recentImages' or 'friends'
     const [friendUsername, setFriendUsername] = useState(''); // State for the search input
     const { username } = useParams();
@@ -161,8 +159,6 @@ const ProfileContent = ({ user, images, friends, isOwnProfile }) => {
             
             {!isOwnProfile && (
                 <>
-                {console.log("Navigating to:", `/profile/${user.name}`)}
-                
                 <Link to={`/profile`} >
                     <button
                         className="px-4 py-2 font-semibold text-gray-500 border border-gray-300 rounded-md hover:bg-gray-200 transition duration-200"

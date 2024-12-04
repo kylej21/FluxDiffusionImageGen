@@ -61,7 +61,7 @@ function UploadImage({ autoUploadData }) {
       // const backendUrl = process.env.REACT_APP_BACKEND_URL;
       // I don't know why the .env is not found, so I commented the line above and added this line
       const backendUrl = "http://127.0.0.1:8000";
-      console.log('Backend URL:', backendUrl); // Debugging
+      //console.log('Backend URL:', backendUrl); // Debugging
 
       if (!backendUrl) {
         enqueueSnackbar('Backend URL is not defined.', { variant: 'error' });

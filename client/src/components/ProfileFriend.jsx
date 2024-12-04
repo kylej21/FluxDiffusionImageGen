@@ -36,7 +36,7 @@ const ProfileFriend = ({ friendUsername }) => {
                 const data = await response.json();
 
                 if (response.ok) {
-                    console.log("here", response)
+                    //console.log("here", response)
                     setFriendImages(data.images);
                 } else {
                     console.error('Failed to fetch images:', data.message);

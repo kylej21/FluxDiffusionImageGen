@@ -40,7 +40,7 @@ const Login = () => {
     // Second useEffect - for fetching images when user changes
     /*useEffect(() => {
         if (user?.username) {
-            console.log('User changed, fetching images for:', user.username);
+           
             fetchUserImages();
         }
     }, [user]);*/
@@ -57,7 +57,7 @@ const Login = () => {
             if (res.status !== 200) {
                 enqueueSnackbar(res.message, { variant: 'error', autoHideDuration: 3000 });
             } else {
-                console.log("result of users" + res["users"][0][3])
+               
                 enqueueSnackbar('Login Successful', { variant: 'success', autoHideDuration: 3000 });
                 dispatch(setUser({ userID: res["users"][0][0], username : res["users"][0][1], friends : res["users"][0][3] }));
                 // fetchUserImages(); //fetch images right after logging in
@@ -72,12 +72,12 @@ const Login = () => {
     //11-22
     const fetchUserImages = async () => {
         if (user?.username) {
-            console.log('User changed, fetching images for:', user.username); // Add this
+            // console.log('User changed, fetching images for:', user.username); // Add this
             fetchUserImages();
         }
         const imagesPerPage = 2;
         try {
-            console.log("called backend"); //test
+            // console.log("called backend"); //test
             const response = await fetch(`http://127.0.0.1:8000/gallery?uploader=${user.username}&limit=${imagesPerPage}&page=1`, {
                 method: 'GET',
                 headers: {
@@ -88,15 +88,16 @@ const Login = () => {
             const data = await response.json();
             
             if (response.ok) {
-                console.log('Fetched Images Data:', {
+                /*console.log('Fetched Images Data:', {
                     totalImages: data.total_count,
                     totalPages: data.total_pages,
                     imagesPerPage: data.limit
                 });
+                */
 
                 // Log detailed information for each image
                 data.images.forEach((image, index) => {
-                    console.log(`Image ${index + 1}:`, {
+                     /*console.log(`Image ${index + 1}:`, {
                         id: image.id,
                         title: image.title,
                         description: image.description,
@@ -104,6 +105,7 @@ const Login = () => {
                         timestamp: new Date(image.timestamp).toLocaleString(),
                         imageSize: image.image.length + ' bytes'  // Size of base64 string
                     });
+                    */
                 });
             } else {
                 console.error('Failed to fetch images:', data.message);
@@ -147,7 +149,7 @@ const Login = () => {
 
     const handleLogout = () => {
         enqueueSnackbar('Logged out successfully', { variant: 'success', autoHideDuration: 3000 });
-        console.log("User logged out")
+        //console.log("User logged out")
 
         dispatch(clearUser());
     };

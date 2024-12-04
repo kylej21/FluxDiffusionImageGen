@@ -62,7 +62,7 @@ def register():
             return jsonify({"message": "Database connection successful", "users": users, "status":200}), 200
 
     except Exception as e:
-        print(e)
+        pass
     finally:
         if cursor is not None:
             cursor.close()
@@ -99,6 +99,7 @@ def login():
     except Exception as e:
         #for now just print e
         print(e)
+        
 
     #deactivate cursors
     finally:
@@ -111,7 +112,7 @@ def login():
 def prompt():
     prompt = request.get_json()
     prompt = prompt.get('prompt')
-    print(prompt)
+    #print(prompt)
 
     if os.name == 'nt':  
         python_executable = os.path.abspath(os.path.join('venv', 'Scripts', 'python.exe'))
@@ -127,7 +128,7 @@ def prompt():
        check=True
     )
 
-    print("script successful")
+    #print("script successful")
 
     image_folder = "./fastsdcpu/results/*.png"
 
@@ -193,7 +194,7 @@ def add_friend():
         return jsonify({"message": "Friend added successfully", "status": 200, "friend_id": friend_user_id}), 200
 
     except Exception as e:
-        print(f"Error adding friend: {e}")
+        #print(f"Error adding friend: {e}")
         return jsonify({"message": "Failed to add friend", "error": str(e)}), 500
 
     finally:
@@ -246,7 +247,7 @@ def get_friends():
         return jsonify({"friends": friends}), 200
         
     except Exception as e:
-        print(f"Error fetching friends: {e}")
+        #print(f"Error fetching friends: {e}")
         return jsonify({"message": "Failed to fetch friends", "error": str(e)}), 500
         
     finally:
