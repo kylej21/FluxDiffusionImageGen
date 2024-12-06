@@ -63,7 +63,7 @@ const ProfileContent = ({ user, images, friends, isOwnProfile }) => {
             const data = await response.json();
 
             if (response.ok) {
-                return data.usernames
+                return data.usernames || []
             } else {
                 console.error('Failed to fetch friends:', data.message);
                 enqueueSnackbar('Failed to fetch friends.', { variant: 'error', autoHideDuration: 3000 });

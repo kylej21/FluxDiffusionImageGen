@@ -261,7 +261,7 @@ def id_to_username():
     data = request.get_json()    
     ids = data.get('ids')
     if not ids:
-        return jsonify({"message": "No IDs provided"}), 400
+        return jsonify({"message": "No IDs provided", 'usernames': []}), 200
     usernames = []
     conn = None 
     cursor = None
