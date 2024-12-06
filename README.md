@@ -19,7 +19,7 @@ In a seperate terminal:
 4. ```pip install -r requirements.txt```
 5. ```python main.py```
 
-You can see the frontend in http://localhost:3000/ , and the backend at http://127.0.0.1:5000/
+You can see the frontend in http://localhost:3000/ , and the backend at http://127.0.0.1:8000/
 
 # To Do:
 1. Come up with frontend design
