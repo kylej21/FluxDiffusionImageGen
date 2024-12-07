@@ -19,12 +19,4 @@ In a seperate terminal:
 4. ```pip install -r requirements.txt```
 5. ```python main.py```
 
-You can see the frontend in http://localhost:3000/ , and the backend at http://127.0.0.1:5000/
-
-# To Do:
-1. Come up with frontend design
-2. Setup flask endpoints for backend
-3. Decide on Database option (SQLite, MongoDB, something else online)
-4. Login/Logout features
-5. 2 other features
-6. Ale + Kyle setup Image generation pipeline through backend
+You can see the frontend in http://localhost:3000/ , and the backend at http://127.0.0.1:8000/
