@@ -40,9 +40,18 @@ CREATE TABLE images (
     uploader TEXT NOT NULL,
     timestamp TIMESTAMPTZ DEFAULT NOW()
 );
-
 ```
-4. 
+5. In supabase, go to the home tab, find and click the green connect button, and find the connection string.
+This is where you will find your .env values. 
+For DB_HOST, put the aws link ending in supabase.com  
+For DB_NAME, put postgres
+For DB_USER, put the postgres.username, which comes right after the :// until the : at the start of the connection string
+For DB_PASSWORD, put whatever you chose to be your password
+
+Next, for DB_API_KEY, you will have to X out of the Connect pop up, and scroll down on the home page. There will be a section
+that gives you an API Key, just copy paste this. 
+*Note: There may not be an API Key available if you didn't enable RLS*
+
 Currently, the project has basic react and flask implementation. You will need a seperate terminal to run server and client
 
 1. ```cd client```
