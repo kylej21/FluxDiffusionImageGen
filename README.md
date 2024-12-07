@@ -5,6 +5,44 @@ Full-Stack application with python + flask + pytorch backend, react + JS fronten
   The backend diffusion model is from: https://github.com/rupeshs/fastsdcpu
 
 # Getting Started
+First, clone the repo:
+```git clone git@github.com:kylej21/FluxDiffusionImageGen.git```
+or 
+```git clone https://github.com/kylej21/FluxDiffusionImageGen.git```
+
+Next, fill out .env variables with generated keys and authentication tokens. Refer to the .env.example files
+which show where each .env file should go, and what variable names they must have. 
+
+For the frontend .env, put the url that your backend will be running on: http://127.0.0.1:8000/
+
+For the backend .env, since the keys are all secure, you will need to generate your own values.
+
+We used Supabase for our database so to replicate this you will need to go to their page and setup a cloud DB
+1. Go to supabase.com and sign up for an account.
+2. Create a project
+3. Navigate to the SQL editor tab
+4. In the SQL query input prompt, run the 2 following queries.
+```
+CREATE TABLE users (
+    userid SERIAL PRIMARY KEY,
+    username VARCHAR NOT NULL,
+    password VARCHAR NOT NULL,
+    friends INT[]
+);
+```
+then,
+```
+CREATE TABLE images (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    image_data BYTEA NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    uploader TEXT NOT NULL,
+    timestamp TIMESTAMPTZ DEFAULT NOW()
+);
+
+```
+4. 
 Currently, the project has basic react and flask implementation. You will need a seperate terminal to run server and client
 
 1. ```cd client```
